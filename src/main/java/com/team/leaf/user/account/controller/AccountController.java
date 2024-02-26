@@ -37,11 +37,6 @@ public class AccountController {
         return new ApiResponse<>(accountService.join(joinRequest));
     }
 
-    /*@GetMapping(value = "/join/{phone}")
-    public ResponseEntity<Boolean> phoneCheck(@PathVariable String phone) {
-        return ResponseEntity.ok(accountService.checkPhoneDuplicate(phone));
-    }*/
-
     @PostMapping("/login")
     public ApiResponse<LoginAccountDto> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
         return new ApiResponse<>(accountService.login(loginRequest, response));
@@ -54,14 +49,15 @@ public class AccountController {
 
     @GetMapping("/issue/token")
     @SecurityRequirement(name = "JWT")
-    public GlobalResDto issuedToken(@AuthenticationPrincipal PrincipalDetails userDetails, @RequestHeader(value = "Authorization") String authorizationHeader, HttpServletResponse response) {
+    public GlobalResDto issuedToken(@AuthenticationPrincipal PrincipalDetails userDetails, HttpServletResponse response) {
+
         response.addHeader(JwtTokenUtil.ACCESS_TOKEN, jwtTokenUtil.createToken(userDetails.getAccountDetail().getEmail(), "Access"));
         return new GlobalResDto("Success IssuedToken", HttpStatus.OK.value());
     }
 
     @GetMapping("/{userEmail}")
     public ResponseEntity findAccountById(@PathVariable String userEmail) {
-        AccountDto account = accountService.getAccount(userEmail);
+        AccountDto account = accountService.getUser(userEmail);
 
         return ResponseEntity.ok(account);
     }

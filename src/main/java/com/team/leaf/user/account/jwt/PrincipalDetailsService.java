@@ -14,7 +14,7 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     public final AccountRepository accountRepository;
 
-    /*@Override
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         AccountDetail accountDetail = accountRepository.findByEmail(email).orElseThrow(
@@ -25,22 +25,5 @@ public class PrincipalDetailsService implements UserDetailsService {
         userDetails.setAccountDetail(accountDetail);
 
         return userDetails;
-    }*/
-
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.println("Attempting to load user by username: " + email);
-
-        AccountDetail accountDetail = accountRepository.findByEmail(email).orElseThrow(
-                () -> new UsernameNotFoundException("Not found User")
-        );
-
-        System.out.println("User loaded successfully: " + accountDetail.getEmail());
-
-        PrincipalDetails userDetails = new PrincipalDetails();
-        userDetails.setAccountDetail(accountDetail);
-
-        return userDetails;
     }
-
 }
